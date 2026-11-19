@@ -1,0 +1,7 @@
+.vs/
+.dotnet-cli/
+bin/
+obj/
+App.config
+*.user
+*.suo

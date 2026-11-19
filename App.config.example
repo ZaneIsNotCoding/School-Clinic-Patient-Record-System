@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <connectionStrings>
+    <!-- Copy this file to App.config and replace the placeholders for your local MySQL Server. -->
+    <add name="ClinicDb" providerName="MySql.Data.MySqlClient" connectionString="Server=localhost;Port=3306;Database=school_clinic_db;Uid=YOUR_MYSQL_USER;Pwd=YOUR_MYSQL_PASSWORD;SslMode=None;AllowPublicKeyRetrieval=True;CharSet=utf8mb4;" />
+  </connectionStrings>
+</configuration>
