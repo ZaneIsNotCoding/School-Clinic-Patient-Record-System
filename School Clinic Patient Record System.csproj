@@ -16,5 +16,6 @@
   <ItemGroup>
     <None Update="App.config" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Database\school_clinic_db.sql" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Database\upgrade_student_teacher_and_medicine_issues.sql" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

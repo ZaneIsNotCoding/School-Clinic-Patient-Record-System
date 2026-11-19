@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS patients (
   patient_id INT AUTO_INCREMENT PRIMARY KEY,
   student_id VARCHAR(40) NOT NULL UNIQUE,
+  person_type ENUM('Student','Teacher') NOT NULL DEFAULT 'Student',
   first_name VARCHAR(80) NOT NULL,
   middle_name VARCHAR(80) NULL,
   last_name VARCHAR(80) NOT NULL,
@@ -77,6 +78,23 @@ CREATE TABLE IF NOT EXISTS medicines (
   date_added DATE NOT NULL,
   remarks TEXT NULL,
   INDEX idx_medicine_expiration(expiration_date)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS medicine_issues (
+  issue_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  patient_id INT NOT NULL,
+  checkup_id INT NULL,
+  medicine_id INT NOT NULL,
+  quantity INT NOT NULL,
+  issued_by INT NULL,
+  issued_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_issue_patient FOREIGN KEY(patient_id) REFERENCES patients(patient_id) ON DELETE RESTRICT,
+  CONSTRAINT fk_issue_checkup FOREIGN KEY(checkup_id) REFERENCES medical_checkups(checkup_id) ON DELETE SET NULL,
+  CONSTRAINT fk_issue_medicine FOREIGN KEY(medicine_id) REFERENCES medicines(medicine_id) ON DELETE RESTRICT,
+  CONSTRAINT fk_issue_user FOREIGN KEY(issued_by) REFERENCES users(user_id) ON DELETE SET NULL,
+  CONSTRAINT chk_issue_quantity CHECK(quantity > 0),
+  INDEX idx_issue_patient(patient_id),
+  INDEX idx_issue_date(issued_at)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS audit_log (

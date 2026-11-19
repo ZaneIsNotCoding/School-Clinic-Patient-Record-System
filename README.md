@@ -8,11 +8,16 @@ MySQL Workbench is used to connect to and manage the database. **MySQL Server is
 
 - Staff sign-in, first-admin setup, administrator and nurse roles
 - Live dashboard showing patient, visit, and medicine totals
-- Patient records with search and add, view, edit, and delete actions
-- Medical checkups and medical history records
-- Medicine stock management
-- Daily, weekly, and monthly visit reports, plus patient, checkup, and inventory reports
-- CSV report export
+- Separate male/female student and teacher counts for the Ilagan clinic, with student totals by course and year level
+- Student and teacher patient records with ID number, full name, year level, course, contact, and emergency-contact information
+- Patient age is calculated from birthdate and refreshed from the birthdate when records are displayed
+- Course dropdown limited to BSIT, BSA, BSN, BSCE, BSEE, BSINDT, BSED, BTVTED, BTLED, and BSM
+- Medical record lookup by system Patient ID or student/teacher ID Number, including patient details, checkups, history, and medicines issued
+- Checkups and medical history select a patient from the saved patient list instead of requiring a manually typed database ID
+- Medicine stock management with patient-linked issues; issuing medicine reduces available inventory in the same database transaction
+- Date-filtered daily, weekly, monthly, and checkup reports, plus patient and inventory reports
+- Student/teacher and gender totals, student summaries by course and year level
+- CSV export, print, and PDF export using the Windows **Microsoft Print to PDF** printer
 - Administrator-only user management
 - Parameterized database commands, salted PBKDF2 password hashes, and an audit log
 
@@ -32,10 +37,10 @@ Install MySQL Server and Workbench using the official [MySQL Installer for Windo
 1. Start the MySQL Server service in Windows. A standard installation often names it `MySQL80`.
 2. Open MySQL Workbench from the Windows Start menu.
 3. Open your local connection. For a typical local setup, use hostname `localhost`, port `3306`, and the MySQL account you created during server installation.
-4. In Workbench, open `Database/school_clinic_db.sql`.
+4. For a new database, open `Database/school_clinic_db.sql` in Workbench. If you already created the earlier version of this project's database, run `Database/upgrade_student_teacher_and_medicine_issues.sql` instead to add the new patient-type and medicine-issue structures.
 5. Run the script with the lightning-bolt **Execute** button. Refresh the **Schemas** panel and confirm `school_clinic_db` appears.
 
-The script creates the database tables, indexes, foreign keys, and audit log. It does not add a default user or sample patient records.
+The setup script creates the database tables, indexes, foreign keys, and audit log. It does not add a default user or sample patient records. The upgrade script preserves existing patient records and marks them as students by default; edit a person's type in Patient Records if needed.
 
 ## Configure the app
 
@@ -69,7 +74,8 @@ School Clinic Patient Record System/
 │   ├── PasswordHelper.cs
 │   └── SessionManager.cs
 ├── Database/
-│   └── school_clinic_db.sql
+│   ├── school_clinic_db.sql
+│   └── upgrade_student_teacher_and_medicine_issues.sql
 ├── Forms/
 │   └── ClinicForms.cs
 ├── App.config
@@ -91,6 +97,14 @@ For a trusted local development connection, check that the connection string inc
 ### The app cannot sign in or load records
 
 Confirm that you ran `Database/school_clinic_db.sql`, the `ClinicDb` settings in `App.config` match the MySQL Server account, and the server is running. The app login is separate from the MySQL login: create the clinic administrator with **Set up first administrator** after the database is set up.
+
+### Medical records says a database table or column is missing
+
+If this database was created with an earlier version, run `Database/upgrade_student_teacher_and_medicine_issues.sql` in Workbench, then reopen the app.
+
+### A medicine does not appear in the issue list
+
+Only medicines with stock above zero and no expired expiration date can be issued. Add stock or update the expiration date in Medicine Inventory, then reopen **Medical Records** and try again.
 
 ## Data and security
 
